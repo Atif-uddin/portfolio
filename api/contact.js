@@ -11,7 +11,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
+  const rawKey = process.env.RESEND_API_KEY || '';
+  const apiKey = rawKey.trim().replace(/^["']|["']$/g, '');
+
   if (!apiKey) {
     console.error('[Resend Error]: RESEND_API_KEY environment variable is missing.');
     return res.status(500).json({ error: 'RESEND_API_KEY environment variable is missing on Vercel.' });
