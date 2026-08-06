@@ -21,6 +21,7 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(true)
   const [typingText, setTypingText] = useState('')
   const [formStatus, setFormStatus] = useState('idle') // idle, submitting, success, error
+  const [errorMessage, setErrorMessage] = useState('')
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   
   const fullText = "Mohammad Atifuddin\nFull Stack Web Developer\n> MERN Stack | Next.js | TypeScript"
@@ -161,24 +162,29 @@ export default function App() {
   const handleContactSubmit = async (e) => {
     e.preventDefault()
     setFormStatus('submitting')
+    setErrorMessage('')
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
+      const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setFormStatus('success')
         setFormData({ name: '', email: '', message: '' })
         setTimeout(() => setFormStatus('idle'), 5000)
       } else {
+        console.error('Contact submit error:', data.error)
+        setErrorMessage(data.error || 'Something went wrong. Please try again.')
         setFormStatus('error')
-        setTimeout(() => setFormStatus('idle'), 5000)
+        setTimeout(() => setFormStatus('idle'), 7000)
       }
     } catch (error) {
       console.error(error)
+      setErrorMessage(error.message || 'Network error. Please try again.')
       setFormStatus('error')
-      setTimeout(() => setFormStatus('idle'), 5000)
+      setTimeout(() => setFormStatus('idle'), 7000)
     }
   }
 
@@ -469,7 +475,7 @@ export default function App() {
               <p className="text-emerald-500 font-mono text-sm mt-4">Message sent successfully! I'll get back to you soon.</p>
             )}
             {formStatus === 'error' && (
-              <p className="text-red-500 font-mono text-sm mt-4">Something went wrong. Please try again later.</p>
+              <p className="text-red-500 font-mono text-sm mt-4">{errorMessage || 'Something went wrong. Please try again later.'}</p>
             )}
           </form>
         </div>
