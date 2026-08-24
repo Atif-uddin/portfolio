@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { 
+  Home,
+  FileDown,
   Sun, 
   Moon, 
   Mail, 
@@ -19,7 +21,8 @@ import {
   Globe,
   MapPin,
   Calendar,
-  X
+  X,
+  Quote
 } from 'lucide-react'
 
 // Custom SVGs for GitHub and LinkedIn
@@ -176,6 +179,9 @@ function GitHubCalendarWidget({ darkMode }) {
 export default function App() {
   const [darkMode, setDarkMode] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDockVisible, setIsDockVisible] = useState(true)
+  const idleTimeoutRef = useRef(null)
+
   const [formStatus, setFormStatus] = useState('idle') // idle, submitting, success, error
   const [errorMessage, setErrorMessage] = useState('')
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
@@ -277,6 +283,34 @@ export default function App() {
     }
   }, [darkMode])
 
+  // Sticky dock idle auto-hide logic (3.5s idle timer)
+  useEffect(() => {
+    const resetIdleTimer = () => {
+      setIsDockVisible(true)
+      if (idleTimeoutRef.current) {
+        clearTimeout(idleTimeoutRef.current)
+      }
+      idleTimeoutRef.current = setTimeout(() => {
+        setIsDockVisible(false)
+      }, 3500)
+    }
+
+    resetIdleTimer()
+
+    window.addEventListener('scroll', resetIdleTimer, { passive: true })
+    window.addEventListener('mousemove', resetIdleTimer, { passive: true })
+    window.addEventListener('touchstart', resetIdleTimer, { passive: true })
+    window.addEventListener('keydown', resetIdleTimer, { passive: true })
+
+    return () => {
+      if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current)
+      window.removeEventListener('scroll', resetIdleTimer)
+      window.removeEventListener('mousemove', resetIdleTimer)
+      window.removeEventListener('touchstart', resetIdleTimer)
+      window.removeEventListener('keydown', resetIdleTimer)
+    }
+  }, [])
+
   // Handle ESC key to close modal
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -333,34 +367,75 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#000000] text-zinc-900 dark:text-zinc-100 bg-grid-pattern transition-colors duration-200 antialiased">
       
-      {/* Floating Bottom Dock Navigation */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 sm:gap-2 px-4 py-2.5 rounded-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800 shadow-xl text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400">
-        <a href="#about" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-          About
+      {/* Floating Bottom Social & Action Dock with Auto-Hide on Idle */}
+      <nav 
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 sm:gap-2.5 px-4 py-2.5 rounded-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800 shadow-2xl text-zinc-600 dark:text-zinc-400 transition-all duration-300 ease-in-out ${
+          isDockVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-8 pointer-events-none'
+        }`}
+      >
+        {/* 1. Home Icon (Scroll immediately to top) */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          title="Home / Back to top"
+          aria-label="Home"
+          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        >
+          <Home className="w-4 h-4" />
+        </button>
+
+        {/* 2. Download Resume Icon */}
+        <a
+          href="/Atifuddin_Resume.pdf"
+          download="Atifuddin_Resume.pdf"
+          title="Download Resume (PDF)"
+          aria-label="Download Resume"
+          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        >
+          <FileDown className="w-4 h-4" />
         </a>
-        <a href="#experience" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-          Experience
+
+        {/* 3. GitHub Icon */}
+        <a
+          href="https://github.com/Atif-uddin"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="GitHub Profile"
+          aria-label="GitHub"
+          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        >
+          <GithubIcon className="w-4 h-4" />
         </a>
-        <a href="#projects" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-          Projects
+
+        {/* 4. LinkedIn Icon */}
+        <a
+          href="https://www.linkedin.com/in/mohammad-atifuddin-139774217"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="LinkedIn Profile"
+          aria-label="LinkedIn"
+          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        >
+          <LinkedinIcon className="w-4 h-4" />
         </a>
-        <a href="#skills" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-          Skills
-        </a>
-        <a href="#github" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-          Activity
-        </a>
+
+        {/* 5. Contact Mail Icon */}
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="px-3 py-1.5 rounded-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 font-semibold transition-colors"
+          title="Get In Touch"
+          aria-label="Get In Touch"
+          className="p-2 rounded-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-colors"
         >
-          Contact
+          <Mail className="w-4 h-4" />
         </button>
-        <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+
+        <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 mx-0.5" />
+
+        {/* 6. Theme Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
+          title="Toggle Theme"
           aria-label="Toggle dark mode"
-          className="p-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
         >
           {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-zinc-600" />}
         </button>
@@ -768,8 +843,29 @@ export default function App() {
           </div>
         </section>
 
+        {/* Productive Quotation & Final CTA Section */}
+        <section className="pt-10 pb-6 border-t border-zinc-200/80 dark:border-zinc-800/90 text-center space-y-6">
+          <div className="max-w-xl mx-auto space-y-2">
+            <p className="text-base sm:text-lg font-medium italic text-zinc-700 dark:text-zinc-300">
+              "First, solve the problem. Then, write the code."
+            </p>
+            <p className="text-xs font-mono text-zinc-400 dark:text-zinc-500">
+              — John Johnson
+            </p>
+          </div>
+
+          <div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold text-sm hover:opacity-90 transition-opacity shadow-md hover:shadow-lg"
+            >
+              <Mail className="w-4 h-4" /> Get in Touch
+            </button>
+          </div>
+        </section>
+
         {/* Clean Footer */}
-        <footer className="pt-10 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 dark:text-zinc-500">
+        <footer className="pt-8 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 dark:text-zinc-500">
           <div className="flex items-center gap-4">
             <span>© {new Date().getFullYear()} Mohammad Atifuddin</span>
             <span>•</span>
