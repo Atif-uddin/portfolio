@@ -44,8 +44,6 @@ function LinkedinIcon({ className = "w-4 h-4" }) {
 function GitHubCalendarWidget({ darkMode }) {
   const [contributionsData, setContributionsData] = useState(null)
   const [totalContributions, setTotalContributions] = useState(190)
-  const [hoveredDay, setHoveredDay] = useState(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch('https://github-contributions-api.jogruber.de/v4/Atif-uddin?y=last')
@@ -57,15 +55,19 @@ function GitHubCalendarWidget({ darkMode }) {
             setTotalContributions(data.total.lastYear)
           }
         }
-        setLoading(false)
       })
-      .catch(() => {
-        setLoading(false)
-      })
+      .catch(() => {})
   }, [])
 
-  // Standard GitHub Green Palette
-  // Level 0: default / Level 1 to 4: exact GitHub greens
+  const formatDate = (dateStr) => {
+    if (!dateStr) return ''
+    const parts = dateStr.split('-')
+    if (parts.length < 3) return dateStr
+    const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  // Exact GitHub Green Palette
   const getCellColor = (level, isDark) => {
     if (isDark) {
       switch (level) {
@@ -86,21 +88,25 @@ function GitHubCalendarWidget({ darkMode }) {
     }
   }
 
-  // Group into columns of 7 days
   const days = contributionsData || Array.from({ length: 364 }, (_, i) => ({
     date: new Date(Date.now() - (363 - i) * 86400000).toISOString().split('T')[0],
-    count: Math.random() > 0.65 ? Math.floor(Math.random() * 5) : 0,
-    level: Math.random() > 0.65 ? Math.floor(Math.random() * 4) + 1 : 0
+    count: Math.random() > 0.6 ? Math.floor(Math.random() * 5) + 1 : 0,
+    level: Math.random() > 0.6 ? Math.floor(Math.random() * 4) + 1 : 0
   }))
 
+  // Focus and stretch from the start of continuous commit activity
+  const activeIndex = days.findIndex(d => d.count > 0)
+  const startWeekIndex = activeIndex !== -1 ? Math.max(0, Math.floor(activeIndex / 7) - 1) * 7 : 0
+  const activeDays = days.slice(startWeekIndex)
+
   const weeks = []
-  for (let i = 0; i < days.length; i += 7) {
-    weeks.push(days.slice(i, i + 7))
+  for (let i = 0; i < activeDays.length; i += 7) {
+    weeks.push(activeDays.slice(i, i + 7))
   }
 
   return (
-    <div className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/80 dark:bg-zinc-950/70 shadow-sm space-y-4">
-      {/* Header with real count */}
+    <div className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/80 dark:bg-zinc-950/70 shadow-sm space-y-5">
+      {/* Header with live total count */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-zinc-100 dark:border-zinc-900 text-sm">
         <div className="flex items-center gap-2">
           <GithubIcon className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
@@ -118,37 +124,40 @@ function GitHubCalendarWidget({ darkMode }) {
         </span>
       </div>
 
-      {/* Interactive Grid Canvas */}
-      <div className="relative overflow-x-auto py-2">
-        <div className="flex gap-[3.5px] min-w-[650px] w-full justify-between">
+      {/* Stretched Interactive Grid with Hover Tooltip at Cell */}
+      <div className="overflow-x-auto py-2">
+        <div className="flex gap-1 sm:gap-1.5 w-full justify-between min-w-[580px]">
           {weeks.map((week, wIdx) => (
-            <div key={wIdx} className="flex flex-col gap-[3.5px]">
+            <div key={wIdx} className="flex flex-col gap-1 sm:gap-1.5 flex-1 items-center">
               {week.map((day, dIdx) => (
-                <div
-                  key={dIdx}
-                  onMouseEnter={() => setHoveredDay(day)}
-                  onMouseLeave={() => setHoveredDay(null)}
-                  style={{
-                    backgroundColor: getCellColor(day.level || 0, darkMode)
-                  }}
-                  className="w-[11px] h-[11px] rounded-[2px] transition-transform hover:scale-125 cursor-pointer"
-                />
+                <div key={dIdx} className="relative group w-full flex justify-center">
+                  <div
+                    style={{
+                      backgroundColor: getCellColor(day.level || 0, darkMode)
+                    }}
+                    className="w-full aspect-square min-w-[11px] min-h-[11px] max-w-[18px] max-h-[18px] rounded-[3px] transition-transform hover:scale-125 cursor-pointer"
+                  />
+                  
+                  {/* Tooltip positioned directly above hovered cell */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center z-50 pointer-events-none whitespace-nowrap">
+                    <div className="px-2.5 py-1 rounded-md bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100 text-[11px] font-sans font-medium shadow-xl border border-zinc-700/80">
+                      {day.count > 0 
+                        ? `${day.count} ${day.count === 1 ? 'contribution' : 'contributions'} on ${formatDate(day.date)}`
+                        : `No contributions on ${formatDate(day.date)}`
+                      }
+                    </div>
+                    <div className="w-1.5 h-1.5 bg-zinc-900 dark:bg-zinc-800 rotate-45 -mt-1 border-r border-b border-zinc-700/80" />
+                  </div>
+                </div>
               ))}
             </div>
           ))}
         </div>
-
-        {/* Hover Floating Details Tooltip */}
-        {hoveredDay && (
-          <div className="absolute top-0 right-0 px-3 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs font-mono shadow-lg pointer-events-none transition-all">
-            {hoveredDay.count} {hoveredDay.count === 1 ? 'contribution' : 'contributions'} on {new Date(hoveredDay.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-          </div>
-        )}
       </div>
 
       {/* Legend */}
       <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 dark:text-zinc-500 pt-1">
-        <span>Learn how we count contributions</span>
+        <span>Continuous commit history</span>
         <div className="flex items-center gap-1.5">
           <span>Less</span>
           {[0, 1, 2, 3, 4].map(lvl => (
@@ -367,7 +376,7 @@ export default function App() {
                 href="mailto:uddinatif34@gmail.com" 
                 className="hover:underline text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors"
               >
-                mailto:uddinatif34@gmail.com
+                uddinatif34@gmail.com
               </a>
             </div>
 
