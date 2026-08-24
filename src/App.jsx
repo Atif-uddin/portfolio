@@ -1,28 +1,25 @@
 import { useEffect, useState } from 'react'
 import { 
-  Menu, 
-  X, 
   Sun, 
   Moon, 
   Mail, 
   ExternalLink, 
-  Code2, 
-  Database, 
-  Server, 
+  FileText, 
   Send, 
-  Briefcase, 
-  GraduationCap, 
-  Layers, 
-  ArrowUpRight,
+  CheckCircle2, 
   Sparkles,
-  CheckCircle2,
-  Terminal,
+  ArrowUpRight,
+  Code2,
+  Database,
+  Server,
+  Layers,
   MapPin,
-  Calendar
+  Calendar,
+  Briefcase
 } from 'lucide-react'
 
-// Custom SVG Icons for GitHub & LinkedIn
-function GithubIcon({ className = "w-5 h-5" }) {
+// Custom SVGs for GitHub and LinkedIn to ensure zero dependency glitch
+function GithubIcon({ className = "w-4 h-4" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
@@ -30,7 +27,7 @@ function GithubIcon({ className = "w-5 h-5" }) {
   )
 }
 
-function LinkedinIcon({ className = "w-5 h-5" }) {
+function LinkedinIcon({ className = "w-4 h-4" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.78a1.68 1.68 0 1 0 0 3.36 1.68 1.68 0 0 0 0-3.36z" />
@@ -40,7 +37,6 @@ function LinkedinIcon({ className = "w-5 h-5" }) {
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(true)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [formStatus, setFormStatus] = useState('idle') // idle, submitting, success, error
   const [errorMessage, setErrorMessage] = useState('')
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
@@ -51,95 +47,68 @@ export default function App() {
       company: 'Code for India',
       duration: 'May 2026 – Jul 2026',
       location: 'Hyderabad, IN',
-      highlights: [
-        'Delivered a full-stack Application Management System (AMS) independently, handling database schema design to frontend role-based routing.',
-        'Implemented RBAC across 3 user roles (Super Admin, Webinar Host, Student) with protected REST APIs and separated role-specific dashboards.',
-        'Integrated Google OAuth for one-click authentication and Resend for automated transactional emails across user roles.'
-      ]
+      description: 'Delivered an Application Management System (AMS) independently, handling database schema design to frontend role-based routing. Implemented RBAC across 3 user roles (Super Admin, Webinar Host, Student) with protected REST APIs, and integrated Google OAuth & Resend for automated role-based transactional emails.'
     },
     {
       role: 'Full Stack Developer Intern',
       company: 'Good Barley Co',
       duration: 'Dec 2025 – May 2026',
       location: 'Hyderabad, IN',
-      highlights: [
-        'Built and tested responsive React UIs, managed MongoDB database operations, and optimized backend API routes for an early-stage product.',
-        'Contributed across full-stack REST API development, database design, and application performance optimization initiatives.'
-      ]
+      description: 'Built and tested responsive user interfaces, managed MongoDB database operations, and optimized backend API performance for an early-stage startup product. Contributed across REST API development, database design, and application performance improvements.'
     }
   ]
 
   const projects = [
     {
-      title: 'E-Commerce Platform',
-      description: 'Production-grade full-stack e-commerce web app with separate user & admin dashboards, product management, cart, and order tracking.',
-      tech: ['React', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'Resend', 'Tailwind CSS'],
-      features: [
-        'JWT authentication with protected routing and admin RBAC.',
-        'Automated order confirmation emails via Resend API.',
-        'Designed & tested 20+ RESTful API endpoints in Postman.'
-      ],
-      githubLink: 'https://github.com/Atif-uddin/E-commerce',
-      liveLink: null
-    },
-    {
-      title: 'Enterprise QR Code Management',
-      description: 'Enterprise QR platform for TalentYug featuring dynamic QR generation, Cloudinary image storage, and print layout customization.',
+      title: 'Enterprise QR Code Management System',
+      description: 'Engineered an enterprise QR platform for TalentYug with dynamic QR generation, Cloudinary image storage, and live database adapter switching between MongoDB and Supabase PostgreSQL. Built an advanced print layout engine with custom paper sizes and PDF export.',
       tech: ['Next.js', 'TypeScript', 'MongoDB', 'PostgreSQL', 'Cloudinary', 'Zod', 'Tailwind CSS'],
-      features: [
-        'Live DB adapter switching between MongoDB & Supabase PostgreSQL.',
-        'Advanced print layout engine supporting all paper sizes & PDF download.',
-        'Runtime schema validation with Zod and type-safe API routes.'
-      ],
-      githubLink: 'https://github.com/Atif-uddin/QR-code-generator',
-      liveLink: 'https://qr-code-generator-atif10.vercel.app/'
+      github: 'https://github.com/Atif-uddin/QR-code-generator',
+      live: 'https://qr-code-generator-atif10.vercel.app/'
     },
     {
       title: 'Application Management System (AMS)',
-      description: 'Multi-role web platform built from scratch with RBAC supporting Super Admin, Webinar Host, and Student access levels.',
-      tech: ['React', 'Vite', 'Node.js', 'Express.js', 'MongoDB', 'OAuth 2.0', 'Resend'],
-      features: [
-        'Super Admin dashboard for host management, webinar topics, and user accounts.',
-        'Protected route architecture ensuring strict role-based authorization.',
-        'Google OAuth sign-in and Resend email notifications.'
-      ],
-      githubLink: 'https://github.com/Atif-uddin/webinar-ams',
-      liveLink: null
+      description: 'Built a multi-role web platform from scratch with RBAC supporting Super Admin, Webinar Host, and Student access levels. Features protected route architecture, host assignment, registration tracking, Google OAuth, and Resend email workflows.',
+      tech: ['React', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'Google OAuth', 'Resend'],
+      github: 'https://github.com/Atif-uddin/webinar-ams',
+      live: null
+    },
+    {
+      title: 'E-Commerce Platform',
+      description: 'Production-grade full-stack e-commerce application with separate user and admin dashboards, inventory management, shopping cart, and order tracking. Features 20+ tested RESTful API endpoints and automated order confirmation emails via Resend.',
+      tech: ['React', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'Resend', 'Tailwind CSS'],
+      github: 'https://github.com/Atif-uddin/E-commerce',
+      live: null
     },
     {
       title: 'Random Password Generator',
-      description: 'Responsive security password generator built with React and Tailwind CSS featuring real-time strength evaluation.',
+      description: 'Fast, client-side security password generator with real-time strength feedback, one-click clipboard copy, and customizable character configurations.',
       tech: ['React', 'Vite', 'Tailwind CSS', 'JavaScript'],
-      features: [
-        'Real-time strength indicator & character set customization.',
-        'One-click instant clipboard copy function.',
-        'Fully responsive UI published on GitHub Pages.'
-      ],
-      githubLink: 'https://github.com/Atif-uddin/password-generator',
-      liveLink: 'https://atif-uddin.github.io/password-generator/'
+      github: 'https://github.com/Atif-uddin/password-generator',
+      live: 'https://atif-uddin.github.io/password-generator/'
     }
   ]
 
-  const skillCategories = [
+  const skillGroups = [
     {
-      category: 'Languages & Core',
-      skills: ['JavaScript (ES6+)', 'TypeScript', 'HTML5', 'CSS3']
+      title: 'Languages',
+      items: ['JavaScript (ES6+)', 'TypeScript', 'HTML5', 'CSS3']
     },
     {
-      category: 'Frontend Development',
-      skills: ['React.js', 'Next.js', 'Tailwind CSS', 'Vite', 'Context API']
+      title: 'Frontend',
+      items: ['React.js', 'Next.js', 'Tailwind CSS', 'Vite', 'Context API']
     },
     {
-      category: 'Backend & APIs',
-      skills: ['Node.js', 'Express.js', 'REST APIs', 'JWT Auth', 'OAuth 2.0', 'Resend API']
+      title: 'Backend',
+      items: ['Node.js', 'Express.js', 'REST APIs', 'JWT', 'OAuth 2.0', 'Resend']
     },
     {
-      category: 'Databases & ORM',
-      skills: ['MongoDB', 'PostgreSQL (Supabase)', 'Mongoose', 'MongoDB Atlas']
+      title: 'Databases',
+      items: ['MongoDB', 'PostgreSQL (Supabase)', 'Mongoose', 'MongoDB Atlas']
     },
     {
-      category: 'Developer Tools',
-      skills: ['Git', 'GitHub', 'VS Code', 'Postman', 'Cloudinary', 'Vercel']
+      title: 'Tools & DevOps',
+      items: ['Git', 'GitHub', 'VS Code', 'Postman', 'Cloudinary', 'Vercel']
     }
   ]
 
@@ -193,498 +162,337 @@ export default function App() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const navLinks = [
-    { name: 'About', href: '#about' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Contact', href: '#contact' },
-  ]
-
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#0B0F19] dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-[#fafafa] dark:bg-[#000000] text-zinc-900 dark:text-zinc-100 bg-grid-pattern transition-colors duration-200">
       
-      {/* Navigation Bar */}
-      <header className="sticky top-0 z-50 border-b border-slate-200/80 dark:border-slate-800/80 bg-slate-50/90 dark:bg-[#0B0F19]/90 backdrop-blur-md">
-        <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      {/* Floating Bottom / Header Dock Navigation */}
+      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800 shadow-lg text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400">
+        <a href="#about" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          About
+        </a>
+        <a href="#experience" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          Experience
+        </a>
+        <a href="#projects" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          Projects
+        </a>
+        <a href="#skills" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          Skills
+        </a>
+        <a href="#contact" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          Contact
+        </a>
+        <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 mx-1" />
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          aria-label="Toggle dark mode"
+          className="p-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        >
+          {darkMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+        </button>
+      </nav>
+
+      {/* Main Single Column Container */}
+      <main className="max-w-2xl mx-auto px-5 sm:px-6 pt-16 sm:pt-24 pb-32">
+        
+        {/* Intro / Hero Header */}
+        <section id="about" className="mb-16">
           
-          {/* Logo / Name */}
-          <a href="#about" className="group flex items-center gap-2 text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-mono text-sm font-semibold shadow-sm group-hover:scale-105 transition-transform">
-              MA
-            </span>
-            <span>Mohammad <span className="text-indigo-600 dark:text-indigo-400">Atifuddin</span></span>
-          </a>
-
-          {/* Desktop Nav Items */}
-          <div className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-700 dark:text-slate-300">
-            {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-            <a
-              href="/Atifuddin_Resume.pdf"
-              download="Atifuddin_Resume.pdf"
-              className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm transition-all shadow-sm hover:shadow-md"
-            >
-              Resume
-            </a>
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              aria-label="Toggle Theme"
-              className="p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800/60 transition-colors"
-            >
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
+          {/* Availability status badge */}
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Available for SDE-1 & Full-Stack Roles
           </div>
 
-          {/* Mobile Actions */}
-          <div className="flex md:hidden items-center gap-3">
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              aria-label="Toggle Theme"
-              className="p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
-            >
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Open Navigation Menu"
-              className="p-2 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </nav>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0B0F19] px-6 pt-4 pb-6 space-y-4 font-medium text-sm">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400"
-              >
-                {link.name}
-              </a>
-            ))}
-            <a
-              href="/Atifuddin_Resume.pdf"
-              download="Atifuddin_Resume.pdf"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block w-full text-center py-2.5 rounded-lg bg-indigo-600 text-white font-medium text-sm"
-            >
-              Download Resume
-            </a>
-          </div>
-        )}
-      </header>
-
-      {/* Hero Section */}
-      <section id="about" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-16 sm:pb-20">
-        <div className="max-w-3xl">
-          
-          {/* Status Badge */}
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs sm:text-sm font-medium mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            Available for SDE-1 / Full Stack Developer Roles
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.15] mb-6">
-            Full Stack Developer building <span className="text-indigo-600 dark:text-indigo-400">production-ready</span> web apps.
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 mb-3">
+            Mohammad Atifuddin
           </h1>
-
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
-            Hi, I'm <strong className="text-slate-900 dark:text-white font-semibold">Mohammad Atifuddin</strong>. Full Stack Engineer (MERN Stack & Next.js) with 6+ months of hands-on startup & agency internship experience. I turn complex database schemas, REST APIs, and authentication flows into clean, high-performance web applications.
+          
+          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 font-medium mb-6">
+            Full Stack Developer (MERN & Next.js) based in Hyderabad, IN
           </p>
 
-          {/* Quick Info / Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 py-6 border-y border-slate-200 dark:border-slate-800/80 mb-8 font-sans">
-            <div>
-              <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Experience</p>
-              <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-1">6+ Months Intern</p>
-            </div>
-            <div>
-              <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Core Stack</p>
-              <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-1">MERN & Next.js</p>
-            </div>
-            <div className="col-span-2 sm:col-span-1">
-              <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Location</p>
-              <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-1">Hyderabad, India</p>
-            </div>
-          </div>
+          <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed mb-6">
+            I'm a full-stack engineer with 6+ months of internship experience building production-ready web applications end-to-end. I focus on clean architecture, reliable REST APIs, database schemas, and responsive user interfaces.
+          </p>
 
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-4">
+          {/* Clean text action links */}
+          <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm font-medium">
             <a 
-              href="#projects" 
-              className="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm sm:text-base transition-all shadow-sm hover:shadow-md flex items-center gap-2"
+              href="mailto:uddinatif34@gmail.com" 
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 hover:opacity-90 transition-opacity"
             >
-              Explore Projects
+              <Mail className="w-3.5 h-3.5" /> Email me
             </a>
             <a 
-              href="#contact" 
-              className="px-6 py-3 rounded-lg border border-slate-300 dark:border-slate-700 hover:border-indigo-600 dark:hover:border-indigo-400 text-slate-800 dark:text-slate-200 font-medium text-sm sm:text-base transition-colors bg-white dark:bg-slate-900/50"
+              href="/Atifuddin_Resume.pdf" 
+              download="Atifuddin_Resume.pdf"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
             >
-              Contact Me
+              <FileText className="w-3.5 h-3.5" /> Resume
             </a>
-            <div className="flex items-center gap-3 ml-2">
-              <a 
-                href="https://github.com/Atif-uddin" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                aria-label="GitHub"
-                className="p-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors"
-              >
-                <GithubIcon className="w-5 h-5" />
-              </a>
-              <a 
-                href="https://www.linkedin.com/in/mohammad-atifuddin-139774217" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                aria-label="LinkedIn"
-                className="p-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors"
-              >
-                <LinkedinIcon className="w-5 h-5" />
-              </a>
-            </div>
+            <a 
+              href="https://github.com/Atif-uddin" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+            >
+              <GithubIcon className="w-3.5 h-3.5" /> GitHub <ArrowUpRight className="w-3 h-3 opacity-60" />
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/mohammad-atifuddin-139774217" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+            >
+              <LinkedinIcon className="w-3.5 h-3.5" /> LinkedIn <ArrowUpRight className="w-3 h-3 opacity-60" />
+            </a>
           </div>
+        </section>
 
-        </div>
-      </section>
-
-      {/* Internship Experience */}
-      <section id="experience" className="py-16 sm:py-20 border-t border-slate-200 dark:border-slate-800/80 bg-slate-100/50 dark:bg-slate-900/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-              <Briefcase className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
-              Internship Experience
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">
-              Hands-on engineering contributions at technology organizations.
-            </p>
-          </div>
+        {/* Experience Section */}
+        <section id="experience" className="mb-16 pt-6 border-t border-zinc-200/70 dark:border-zinc-800/80">
+          <h2 className="text-xs uppercase tracking-widest font-semibold text-zinc-400 dark:text-zinc-500 mb-6">
+            Work Experience
+          </h2>
 
           <div className="space-y-8">
             {internships.map((job, idx) => (
-              <div 
-                key={idx} 
-                className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-indigo-500/50 transition-all"
-              >
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4 pb-4 border-b border-slate-100 dark:border-slate-800">
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">{job.role}</h3>
-                    <p className="text-indigo-600 dark:text-indigo-400 font-semibold text-base">{job.company}</p>
-                  </div>
-                  <div className="text-left md:text-right font-sans text-sm text-slate-500 dark:text-slate-400">
-                    <p className="flex items-center gap-1.5 md:justify-end">
-                      <Calendar className="w-4 h-4 text-indigo-500" />
-                      {job.duration}
-                    </p>
-                    <p className="flex items-center gap-1.5 md:justify-end mt-1 text-slate-400">
-                      <MapPin className="w-3.5 h-3.5" />
-                      {job.location}
-                    </p>
-                  </div>
+              <div key={idx} className="group">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2">
+                  <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                    {job.role} <span className="text-zinc-400 font-normal">at</span> <span className="font-semibold text-zinc-900 dark:text-zinc-100">{job.company}</span>
+                  </h3>
+                  <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500 shrink-0">
+                    {job.duration}
+                  </span>
                 </div>
-
-                <ul className="space-y-2.5">
-                  {job.highlights.map((point, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                      <span className="text-indigo-500 shrink-0 font-bold mt-1">✓</span>
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-xs text-zinc-400 dark:text-zinc-500 mb-3">
+                  {job.location}
+                </p>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                  {job.description}
+                </p>
               </div>
             ))}
           </div>
+        </section>
 
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="py-16 sm:py-20 border-t border-slate-200 dark:border-slate-800/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-              <Layers className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
-              Featured Projects
+        {/* Featured Projects Section */}
+        <section id="projects" className="mb-16 pt-6 border-t border-zinc-200/70 dark:border-zinc-800/80">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xs uppercase tracking-widest font-semibold text-zinc-400 dark:text-zinc-500">
+              Selected Projects
             </h2>
-            <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">
-              Real-world full-stack web applications engineered with production features.
-            </p>
+            <a 
+              href="https://github.com/Atif-uddin?tab=repositories" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white inline-flex items-center gap-1 transition-colors"
+            >
+              View all on GitHub <ArrowUpRight className="w-3 h-3" />
+            </a>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-6">
             {projects.map((project, idx) => (
               <div 
-                key={idx} 
-                className="flex flex-col justify-between p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-indigo-500/60 transition-all group"
+                key={idx}
+                className="p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/60 dark:bg-zinc-900/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group"
               >
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                <div className="flex items-start justify-between gap-4 mb-2">
+                  <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  {/* Feature Highlights */}
-                  <ul className="space-y-2 mb-6 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                    {project.features.map((feat, fIdx) => (
-                      <li key={fIdx} className="flex items-start gap-2">
-                        <span className="text-indigo-500 font-bold">›</span>
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  {/* Tech Tag Pills */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tech.map((t, tIdx) => (
-                      <span key={tIdx} className="text-xs px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Project External Links */}
-                  <div className="flex items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                    <a
-                      href={project.githubLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-                    >
-                      <GithubIcon className="w-4 h-4" /> Code
-                    </a>
-                    {project.liveLink ? (
-                      <a
-                        href={project.liveLink}
-                        target="_blank"
+                  
+                  <div className="flex items-center gap-3 shrink-0 text-xs font-medium">
+                    {project.github && (
+                      <a 
+                        href={project.github} 
+                        target="_blank" 
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                        className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white inline-flex items-center gap-1 transition-colors"
                       >
-                        <ExternalLink className="w-4 h-4" /> Live Demo
+                        Code <ArrowUpRight className="w-3 h-3" />
                       </a>
-                    ) : (
-                      <span className="text-xs font-medium text-slate-400 dark:text-slate-600 select-none">
-                        Live Demo (Soon)
-                      </span>
+                    )}
+                    {project.live && (
+                      <a 
+                        href={project.live} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1 transition-colors"
+                      >
+                        Live <ArrowUpRight className="w-3 h-3" />
+                      </a>
                     )}
                   </div>
                 </div>
 
-              </div>
-            ))}
-          </div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+                  {project.description}
+                </p>
 
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className="py-16 sm:py-20 border-t border-slate-200 dark:border-slate-800/80 bg-slate-100/50 dark:bg-slate-900/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-              <Code2 className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
-              Technical Stack
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">
-              Languages, frameworks, databases, and developer tools I build with.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {skillCategories.map((sec, idx) => (
-              <div 
-                key={idx}
-                className="p-6 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm"
-              >
-                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-indigo-500"></span>
-                  {sec.category}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {sec.skills.map((sk, sIdx) => (
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tech.map((t, tIdx) => (
                     <span 
-                      key={sIdx}
-                      className="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-indigo-500 transition-colors"
+                      key={tIdx} 
+                      className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-700/50"
                     >
-                      {sk}
+                      {t}
                     </span>
                   ))}
                 </div>
               </div>
             ))}
           </div>
+        </section>
 
-        </div>
-      </section>
+        {/* Technical Skills Section */}
+        <section id="skills" className="mb-16 pt-6 border-t border-zinc-200/70 dark:border-zinc-800/80">
+          <h2 className="text-xs uppercase tracking-widest font-semibold text-zinc-400 dark:text-zinc-500 mb-6">
+            Skills & Technologies
+          </h2>
 
-      {/* Education */}
-      <section className="py-16 border-t border-slate-200 dark:border-slate-800/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold text-sm mb-1">
-                <GraduationCap className="w-5 h-5" /> Education & Degree
+          <div className="space-y-4">
+            {skillGroups.map((group, idx) => (
+              <div key={idx} className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4 text-sm">
+                <span className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 w-28 shrink-0 uppercase pt-1">
+                  {group.title}
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {group.items.map((skill, sIdx) => (
+                    <span 
+                      key={sIdx}
+                      className="px-2.5 py-1 rounded-md text-xs font-medium bg-zinc-100/80 dark:bg-zinc-900 border border-zinc-200/70 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                B.Tech in Computer Science & Design (CSD)
-              </h3>
-              <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
-                Sree Chaitanya College of Engineering • Karimnagar, India
+            ))}
+          </div>
+        </section>
+
+        {/* Education & Certifications */}
+        <section className="mb-16 pt-6 border-t border-zinc-200/70 dark:border-zinc-800/80">
+          <h2 className="text-xs uppercase tracking-widest font-semibold text-zinc-400 dark:text-zinc-500 mb-6">
+            Education & Certifications
+          </h2>
+
+          <div className="space-y-6 text-sm">
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">
+                  B.Tech in Computer Science & Design (CSD)
+                </h3>
+                <span className="text-xs font-mono text-zinc-400 shrink-0">2022 – 2026</span>
+              </div>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                Sree Chaitanya College of Engineering • CGPA: 7.2 / 10
               </p>
             </div>
-            <div className="text-left md:text-right font-sans">
-              <span className="inline-block px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-medium text-xs sm:text-sm border border-indigo-200 dark:border-indigo-800">
-                CGPA: 7.2 / 10
-              </span>
-              <p className="text-slate-500 text-sm mt-2">2022 – 2026</p>
+
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">
+                  Full Stack Web Development (MERN Stack)
+                </h3>
+                <span className="text-xs font-mono text-zinc-400 shrink-0">Jan 2026 – May 2026</span>
+              </div>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                Code for India • Certificate of Completion
+              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-16 sm:py-24 border-t border-slate-200 dark:border-slate-800/80 bg-slate-100/40 dark:bg-slate-900/40">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight mb-3">
-              Get In <span className="text-indigo-600 dark:text-indigo-400">Touch</span>
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-lg mx-auto">
-              Open for full-stack engineering opportunities, project inquiries, or technical discussion. Drop a message below!
-            </p>
-          </div>
+        {/* Contact / Get In Touch Section */}
+        <section id="contact" className="pt-6 border-t border-zinc-200/70 dark:border-zinc-800/80">
+          <h2 className="text-xs uppercase tracking-widest font-semibold text-zinc-400 dark:text-zinc-500 mb-3">
+            Contact
+          </h2>
 
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm">
-            <form onSubmit={handleContactSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-900 dark:text-white text-sm transition-all"
-                    placeholder="Your Name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-900 dark:text-white text-sm transition-all"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Message</label>
-                <textarea
-                  rows="4"
-                  name="message"
-                  required
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-900 dark:text-white text-sm transition-all resize-none"
-                  placeholder="Hi Atifuddin, I would like to talk about..."
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                disabled={formStatus === 'submitting'}
-                className="w-full py-3.5 px-6 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600/50 text-white font-medium text-sm transition-all flex items-center justify-center gap-2 shadow-sm"
-              >
-                {formStatus === 'submitting' ? (
-                  'Sending Message...'
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" /> Send Message
-                  </>
-                )}
-              </button>
-
-              {formStatus === 'success' && (
-                <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-medium flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 shrink-0" />
-                  Message sent successfully! I will get back to you shortly.
-                </div>
-              )}
-              {formStatus === 'error' && (
-                <div className="p-3.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium">
-                  {errorMessage || 'Something went wrong. Please try again later.'}
-                </div>
-              )}
-            </form>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800/80 py-10 text-center">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-medium">
-            © {new Date().getFullYear()} Mohammad Atifuddin. Built with React & Tailwind CSS.
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">
+            Have a project in mind, an open role, or just want to say hi? Send me a message or write directly to <a href="mailto:uddinatif34@gmail.com" className="text-zinc-900 dark:text-zinc-100 font-medium underline underline-offset-4 hover:text-indigo-600 dark:hover:text-indigo-400">uddinatif34@gmail.com</a>.
           </p>
-          <div className="flex items-center gap-4 text-slate-500 dark:text-slate-400">
-            <a 
-              href="https://github.com/Atif-uddin" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-              aria-label="GitHub Profile"
+
+          <form onSubmit={handleContactSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1.5">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 outline-none text-xs sm:text-sm text-zinc-900 dark:text-white transition-colors"
+                  placeholder="Your name"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1.5">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 outline-none text-xs sm:text-sm text-zinc-900 dark:text-white transition-colors"
+                  placeholder="your.email@example.com"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1.5">Message</label>
+              <textarea
+                rows="4"
+                name="message"
+                required
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full px-3.5 py-2 rounded-lg bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 outline-none text-xs sm:text-sm text-zinc-900 dark:text-white transition-colors resize-none"
+                placeholder="What's on your mind?"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={formStatus === 'submitting'}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium text-xs sm:text-sm hover:opacity-90 disabled:opacity-50 transition-opacity"
             >
-              <GithubIcon className="w-5 h-5" />
-            </a>
-            <a 
-              href="https://www.linkedin.com/in/mohammad-atifuddin-139774217" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-              aria-label="LinkedIn Profile"
-            >
-              <LinkedinIcon className="w-5 h-5" />
-            </a>
-            <a 
-              href="mailto:uddinatif34@gmail.com" 
-              className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-              aria-label="Email"
-            >
-              <Mail className="w-5 h-5" />
-            </a>
+              {formStatus === 'submitting' ? (
+                'Sending...'
+              ) : (
+                <>
+                  <Send className="w-3.5 h-3.5" /> Send Message
+                </>
+              )}
+            </button>
+
+            {formStatus === 'success' && (
+              <p className="text-xs sm:text-sm font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 pt-2">
+                <CheckCircle2 className="w-4 h-4" /> Message sent successfully! I'll get back to you soon.
+              </p>
+            )}
+            {formStatus === 'error' && (
+              <p className="text-xs sm:text-sm font-medium text-red-500 pt-2">
+                {errorMessage || 'Something went wrong. Please try again.'}
+              </p>
+            )}
+          </form>
+
+          {/* Footer note */}
+          <div className="mt-16 pt-8 border-t border-zinc-200/50 dark:border-zinc-800/50 flex items-center justify-between text-xs text-zinc-400 dark:text-zinc-500">
+            <span>© {new Date().getFullYear()} Mohammad Atifuddin</span>
+            <span className="font-mono text-[11px]">atifuddin.dev</span>
           </div>
-        </div>
-      </footer>
+        </section>
+
+      </main>
 
     </div>
   )
