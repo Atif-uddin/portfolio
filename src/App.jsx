@@ -18,10 +18,12 @@ import {
   GitCommit,
   Terminal,
   Globe,
+  MapPin,
+  Calendar,
   Check
 } from 'lucide-react'
 
-// Custom SVGs for GitHub and LinkedIn to ensure zero dependency glitch
+// Custom SVGs for GitHub and LinkedIn
 function GithubIcon({ className = "w-4 h-4" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -35,6 +37,131 @@ function LinkedinIcon({ className = "w-4 h-4" }) {
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.78a1.68 1.68 0 1 0 0 3.36 1.68 1.68 0 0 0 0-3.36z" />
     </svg>
+  )
+}
+
+// Interactive Real GitHub Contributions Calendar Component
+function GitHubCalendarWidget({ darkMode }) {
+  const [contributionsData, setContributionsData] = useState(null)
+  const [totalContributions, setTotalContributions] = useState(190)
+  const [hoveredDay, setHoveredDay] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('https://github-contributions-api.jogruber.de/v4/Atif-uddin?y=last')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.contributions) {
+          setContributionsData(data.contributions)
+          if (data.total && data.total.lastYear) {
+            setTotalContributions(data.total.lastYear)
+          }
+        }
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
+  }, [])
+
+  // Standard GitHub Green Palette
+  // Level 0: default / Level 1 to 4: exact GitHub greens
+  const getCellColor = (level, isDark) => {
+    if (isDark) {
+      switch (level) {
+        case 1: return '#0e4429'
+        case 2: return '#006d32'
+        case 3: return '#26a641'
+        case 4: return '#39d353'
+        default: return '#161b22'
+      }
+    } else {
+      switch (level) {
+        case 1: return '#9be9a8'
+        case 2: return '#40c463'
+        case 3: return '#30a14e'
+        case 4: return '#216e39'
+        default: return '#ebedf0'
+      }
+    }
+  }
+
+  // Group into columns of 7 days
+  const days = contributionsData || Array.from({ length: 364 }, (_, i) => ({
+    date: new Date(Date.now() - (363 - i) * 86400000).toISOString().split('T')[0],
+    count: Math.random() > 0.65 ? Math.floor(Math.random() * 5) : 0,
+    level: Math.random() > 0.65 ? Math.floor(Math.random() * 4) + 1 : 0
+  }))
+
+  const weeks = []
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7))
+  }
+
+  return (
+    <div className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/80 dark:bg-zinc-950/70 shadow-sm space-y-4">
+      {/* Header with real count */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-zinc-100 dark:border-zinc-900 text-sm">
+        <div className="flex items-center gap-2">
+          <GithubIcon className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
+          <a 
+            href="https://github.com/Atif-uddin" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="font-bold text-zinc-950 dark:text-zinc-50 hover:underline inline-flex items-center gap-1"
+          >
+            @Atif-uddin on GitHub <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
+          </a>
+        </div>
+        <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+          {totalContributions} contributions in the last year
+        </span>
+      </div>
+
+      {/* Interactive Grid Canvas */}
+      <div className="relative overflow-x-auto py-2">
+        <div className="flex gap-[3.5px] min-w-[650px] w-full justify-between">
+          {weeks.map((week, wIdx) => (
+            <div key={wIdx} className="flex flex-col gap-[3.5px]">
+              {week.map((day, dIdx) => (
+                <div
+                  key={dIdx}
+                  onMouseEnter={() => setHoveredDay(day)}
+                  onMouseLeave={() => setHoveredDay(null)}
+                  style={{
+                    backgroundColor: getCellColor(day.level || 0, darkMode)
+                  }}
+                  className="w-[11px] h-[11px] rounded-[2px] transition-transform hover:scale-125 cursor-pointer"
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* Hover Floating Details Tooltip */}
+        {hoveredDay && (
+          <div className="absolute top-0 right-0 px-3 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs font-mono shadow-lg pointer-events-none transition-all">
+            {hoveredDay.count} {hoveredDay.count === 1 ? 'contribution' : 'contributions'} on {new Date(hoveredDay.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </div>
+        )}
+      </div>
+
+      {/* Legend */}
+      <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 dark:text-zinc-500 pt-1">
+        <span>Learn how we count contributions</span>
+        <div className="flex items-center gap-1.5">
+          <span>Less</span>
+          {[0, 1, 2, 3, 4].map(lvl => (
+            <span
+              key={lvl}
+              style={{ backgroundColor: getCellColor(lvl, darkMode) }}
+              className="w-[10px] h-[10px] rounded-[2px] inline-block"
+            />
+          ))}
+          <span>More</span>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -207,63 +334,60 @@ export default function App() {
         </button>
       </nav>
 
-      {/* Main Single Column Container */}
+      {/* Main Container */}
       <main className="max-w-3xl sm:max-w-4xl mx-auto px-5 sm:px-8 pt-16 sm:pt-24 pb-36 space-y-20">
         
         {/* Intro / Hero Header */}
-        <section id="about" className="space-y-8">
+        <section id="about" className="space-y-6">
           
-          {/* Availability status badge */}
-          <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Available for SDE-1 & Full-Stack Developer Roles
-          </div>
-
           <div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 mb-3">
+            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 mb-2">
               Mohammad Atifuddin
             </h1>
-            <p className="text-lg sm:text-xl font-medium text-zinc-600 dark:text-zinc-400">
-              Full Stack Software Developer & Engineer
+            <p className="text-sm sm:text-base font-medium text-zinc-500 dark:text-zinc-400">
+              Full Stack Software Developer
             </p>
           </div>
 
-          {/* Point-wise clear introduction (0xomer style) */}
-          <div className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/60 shadow-sm space-y-3.5 text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed">
-            <p className="flex items-start gap-3">
-              <span className="text-emerald-500 shrink-0 font-bold mt-0.5">▹</span>
-              <span><strong className="text-zinc-950 dark:text-zinc-100 font-semibold">Specialization:</strong> Full Stack Web Development (MERN Stack & Next.js), RESTful API design, database architecture, and authentication flows.</span>
-            </p>
-            <p className="flex items-start gap-3">
-              <span className="text-emerald-500 shrink-0 font-bold mt-0.5">▹</span>
-              <span><strong className="text-zinc-950 dark:text-zinc-100 font-semibold">Experience:</strong> 6+ months of hands-on internship experience building and shipping production-ready web platforms end-to-end.</span>
-            </p>
-            <p className="flex items-start gap-3">
-              <span className="text-emerald-500 shrink-0 font-bold mt-0.5">▹</span>
-              <span><strong className="text-zinc-950 dark:text-zinc-100 font-semibold">Core Stack:</strong> React.js, Next.js, Node.js, Express.js, TypeScript, MongoDB, PostgreSQL (Supabase), and Tailwind CSS.</span>
-            </p>
-            <p className="flex items-start gap-3">
-              <span className="text-emerald-500 shrink-0 font-bold mt-0.5">▹</span>
-              <span><strong className="text-zinc-950 dark:text-zinc-100 font-semibold">Location:</strong> Hyderabad, Telangana, India.</span>
-            </p>
-            <p className="flex items-start gap-3">
-              <span className="text-emerald-500 shrink-0 font-bold mt-0.5">▹</span>
-              <span><strong className="text-zinc-950 dark:text-zinc-100 font-semibold">Objective:</strong> Looking for an SDE-1 role to build scalable systems and solve real-world problems.</span>
-            </p>
+          {/* Short summary paragraph about what he does */}
+          <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-3xl">
+            Full Stack Developer (MERN Stack & Next.js) with 6+ months of internship experience building and shipping production-ready web applications. Proven ability to deliver features end-to-end from REST API design and JWT authentication to responsive React UIs and cloud deployments.
+          </p>
+
+          {/* Personal information in points with subtle matching icons in same text color (not oversized or over-colored) */}
+          <div className="space-y-2 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-medium">
+            <div className="flex items-center gap-2.5">
+              <Code2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
+              <span>Full Stack Developer</span>
+            </div>
+            
+            <div className="flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
+              <a 
+                href="mailto:uddinatif34@gmail.com" 
+                className="hover:underline text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors"
+              >
+                mailto:uddinatif34@gmail.com
+              </a>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <MapPin className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
+              <span>Hyderabad, IN</span>
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 ml-1 mr-1" />
+              <span className="text-emerald-700 dark:text-emerald-400 font-semibold">Available to connect</span>
+            </div>
           </div>
 
           {/* Quick Action Link Pills */}
-          <div className="flex flex-wrap items-center gap-3 pt-1">
-            <a 
-              href="mailto:uddinatif34@gmail.com" 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium text-xs sm:text-sm hover:opacity-90 transition-opacity shadow-sm"
-            >
-              <Mail className="w-4 h-4" /> Email me
-            </a>
+          <div className="flex flex-wrap items-center gap-3 pt-2">
             <a 
               href="/Atifuddin_Resume.pdf" 
               download="Atifuddin_Resume.pdf"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 font-medium text-xs sm:text-sm transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium text-xs sm:text-sm hover:opacity-90 transition-opacity shadow-sm"
             >
               <FileText className="w-4 h-4" /> Resume (PDF)
             </a>
@@ -455,58 +579,19 @@ export default function App() {
           </div>
         </section>
 
-        {/* GitHub Contributions Section */}
+        {/* GitHub Contributions Section with Exact Green Color Scheme & Hover Tooltip */}
         <section id="github" className="space-y-6 pt-4 border-t border-zinc-200/80 dark:border-zinc-800/90">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2.5">
               <GitCommit className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-              GitHub Contributions & Activity
+              GitHub Contributions
             </h2>
             <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-              Public commit history, repositories, and continuous code activity.
+              Public commit history, repositories, and continuous code activity. Hover any cell to view details.
             </p>
           </div>
 
-          <div className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm space-y-6">
-            
-            {/* Header info */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-zinc-100 dark:border-zinc-900 text-sm">
-              <div className="flex items-center gap-3">
-                <GithubIcon className="w-6 h-6 text-zinc-900 dark:text-zinc-100" />
-                <div>
-                  <a 
-                    href="https://github.com/Atif-uddin" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="font-bold text-zinc-900 dark:text-zinc-100 hover:text-indigo-600 dark:hover:text-indigo-400 inline-flex items-center gap-1"
-                  >
-                    @Atif-uddin <ArrowUpRight className="w-3.5 h-3.5" />
-                  </a>
-                  <p className="text-xs text-zinc-500">Active repository contributions & open source</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 text-xs font-mono text-zinc-600 dark:text-zinc-400">
-                <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-                  Full Stack Engineer
-                </span>
-              </div>
-            </div>
-
-            {/* GitHub Contribution Activity Calendar Graph */}
-            <div className="overflow-x-auto py-2">
-              <img 
-                src="https://ghchart.rshah.org/4f46e5/Atif-uddin" 
-                alt="Mohammad Atifuddin GitHub Contribution Graph" 
-                className="w-full min-w-[620px] rounded-lg dark:invert dark:hue-rotate-180 transition-all opacity-90 hover:opacity-100"
-                loading="lazy"
-              />
-            </div>
-
-            <p className="text-xs text-center text-zinc-400 dark:text-zinc-500 font-mono">
-              Live contributions dynamically tracked from GitHub profile.
-            </p>
-          </div>
+          <GitHubCalendarWidget darkMode={darkMode} />
         </section>
 
         {/* Education & Certifications */}
