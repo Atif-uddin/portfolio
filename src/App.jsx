@@ -4,7 +4,6 @@ import {
   Moon, 
   Mail, 
   ExternalLink, 
-  FileText, 
   Send, 
   CheckCircle2, 
   ArrowUpRight,
@@ -20,7 +19,7 @@ import {
   Globe,
   MapPin,
   Calendar,
-  Check
+  X
 } from 'lucide-react'
 
 // Custom SVGs for GitHub and LinkedIn
@@ -176,9 +175,10 @@ function GitHubCalendarWidget({ darkMode }) {
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [formStatus, setFormStatus] = useState('idle') // idle, submitting, success, error
   const [errorMessage, setErrorMessage] = useState('')
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
 
   const internships = [
     {
@@ -277,12 +277,31 @@ export default function App() {
     }
   }, [darkMode])
 
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsModalOpen(false)
+      }
+    }
+    if (isModalOpen) {
+      window.addEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = 'unset'
+    }
+  }, [isModalOpen])
+
   const handleContactSubmit = async (e) => {
     e.preventDefault()
     setFormStatus('submitting')
     setErrorMessage('')
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('/api/getintouch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -290,19 +309,20 @@ export default function App() {
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setFormStatus('success')
-        setFormData({ name: '', email: '', message: '' })
-        setTimeout(() => setFormStatus('idle'), 5000)
+        setFormData({ name: '', email: '', subject: '', message: '' })
+        setTimeout(() => {
+          setFormStatus('idle')
+          setIsModalOpen(false)
+        }, 3000)
       } else {
         console.error('Contact submit error:', data.error)
         setErrorMessage(data.error || 'Something went wrong. Please try again.')
         setFormStatus('error')
-        setTimeout(() => setFormStatus('idle'), 7000)
       }
     } catch (error) {
       console.error(error)
       setErrorMessage(error.message || 'Network error. Please try again.')
       setFormStatus('error')
-      setTimeout(() => setFormStatus('idle'), 7000)
     }
   }
 
@@ -314,7 +334,7 @@ export default function App() {
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#000000] text-zinc-900 dark:text-zinc-100 bg-grid-pattern transition-colors duration-200 antialiased">
       
       {/* Floating Bottom Dock Navigation */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 sm:gap-2 px-4 py-2.5 rounded-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800 shadow-xl text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400">
+      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 sm:gap-2 px-4 py-2.5 rounded-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800 shadow-xl text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400">
         <a href="#about" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
           About
         </a>
@@ -330,9 +350,12 @@ export default function App() {
         <a href="#github" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
           Activity
         </a>
-        <a href="#contact" className="px-3 py-1.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="px-3 py-1.5 rounded-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 font-semibold transition-colors"
+        >
           Contact
-        </a>
+        </button>
         <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 mx-1" />
         <button
           onClick={() => setDarkMode(!darkMode)}
@@ -342,6 +365,127 @@ export default function App() {
           {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-zinc-600" />}
         </button>
       </nav>
+
+      {/* Get In Touch Modal Form */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div 
+            className="relative w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-2xl p-6 sm:p-8 space-y-6 animate-in zoom-in-95 duration-150"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-4 pb-4 border-b border-zinc-100 dark:border-zinc-900">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  Get In Touch
+                </h2>
+                <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+                  Send a message directly to my inbox at <strong className="text-zinc-700 dark:text-zinc-300">uddinatif34@gmail.com</strong>
+                </p>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                aria-label="Close modal"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleContactSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm text-zinc-900 dark:text-white transition-colors"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm text-zinc-900 dark:text-white transition-colors"
+                    placeholder="john@example.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Subject</label>
+                <input
+                  type="text"
+                  name="subject"
+                  required
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm text-zinc-900 dark:text-white transition-colors"
+                  placeholder="Opportunity / Collaboration / Inquiry"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Message</label>
+                <textarea
+                  rows="4"
+                  name="message"
+                  required
+                  value={formData.message}
+                  onChange={handleChange}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm text-zinc-900 dark:text-white transition-colors resize-none"
+                  placeholder="Hi Atifuddin, I'd like to discuss..."
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 font-medium text-sm transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={formStatus === 'submitting'}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm disabled:opacity-50 transition-all shadow-sm"
+                >
+                  {formStatus === 'submitting' ? (
+                    'Sending...'
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" /> Send Message
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {formStatus === 'success' && (
+                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm font-medium flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  Message sent successfully! I will get back to you shortly.
+                </div>
+              )}
+              {formStatus === 'error' && (
+                <p className="text-xs sm:text-sm font-medium text-red-500 pt-1">
+                  {errorMessage || 'Something went wrong. Please try again.'}
+                </p>
+              )}
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Main Container */}
       <main className="max-w-3xl sm:max-w-4xl mx-auto px-5 sm:px-8 pt-16 sm:pt-24 pb-36 space-y-20">
@@ -363,8 +507,8 @@ export default function App() {
             Full Stack Developer (MERN Stack & Next.js) with 6+ months of internship experience building and shipping production-ready web applications. Proven ability to deliver features end-to-end from REST API design and JWT authentication to responsive React UIs and cloud deployments.
           </p>
 
-          {/* Personal information in points with subtle matching icons in same text color (not oversized or over-colored) */}
-          <div className="space-y-2 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-medium">
+          {/* Personal information in points with subtle matching icons in same text color */}
+          <div className="space-y-2.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-medium">
             <div className="flex items-center gap-2.5">
               <Code2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
               <span>Full Stack Developer</span>
@@ -391,31 +535,14 @@ export default function App() {
             </div>
           </div>
 
-          {/* Quick Action Link Pills */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <a 
-              href="/Atifuddin_Resume.pdf" 
-              download="Atifuddin_Resume.pdf"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium text-xs sm:text-sm hover:opacity-90 transition-opacity shadow-sm"
+          {/* Clean Get in Touch CTA button */}
+          <div className="pt-2">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold text-xs sm:text-sm hover:opacity-90 transition-opacity shadow-sm"
             >
-              <FileText className="w-4 h-4" /> Resume (PDF)
-            </a>
-            <a 
-              href="https://github.com/Atif-uddin" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 font-medium text-xs sm:text-sm transition-colors shadow-sm"
-            >
-              <GithubIcon className="w-4 h-4" /> GitHub <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
-            </a>
-            <a 
-              href="https://www.linkedin.com/in/mohammad-atifuddin-139774217" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 font-medium text-xs sm:text-sm transition-colors shadow-sm"
-            >
-              <LinkedinIcon className="w-4 h-4" /> LinkedIn <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
-            </a>
+              <Mail className="w-4 h-4" /> Get in Touch
+            </button>
           </div>
 
         </section>
@@ -641,91 +768,38 @@ export default function App() {
           </div>
         </section>
 
-        {/* Contact / Get In Touch Section */}
-        <section id="contact" className="space-y-6 pt-4 border-t border-zinc-200/80 dark:border-zinc-800/90">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2.5">
-              <Mail className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-              Get In Touch
-            </h2>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-              Have an open role, project, or question? Send a message directly below or write to <a href="mailto:uddinatif34@gmail.com" className="text-zinc-900 dark:text-zinc-100 font-medium underline underline-offset-4 hover:text-indigo-600 dark:hover:text-indigo-400">uddinatif34@gmail.com</a>.
-            </p>
-          </div>
-
-          <form onSubmit={handleContactSubmit} className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 outline-none text-sm text-zinc-900 dark:text-white transition-colors"
-                  placeholder="John Doe"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 outline-none text-sm text-zinc-900 dark:text-white transition-colors"
-                  placeholder="john@example.com"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Message</label>
-              <textarea
-                rows="4"
-                name="message"
-                required
-                value={formData.message}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 outline-none text-sm text-zinc-900 dark:text-white transition-colors resize-none"
-                placeholder="Hi Atifuddin, I would like to connect about..."
-              />
-            </div>
-
+        {/* Clean Footer */}
+        <footer className="pt-10 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 dark:text-zinc-500">
+          <div className="flex items-center gap-4">
+            <span>© {new Date().getFullYear()} Mohammad Atifuddin</span>
+            <span>•</span>
             <button
-              type="submit"
-              disabled={formStatus === 'submitting'}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold text-sm hover:opacity-90 disabled:opacity-50 transition-opacity shadow-sm"
+              onClick={() => setIsModalOpen(true)}
+              className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
             >
-              {formStatus === 'submitting' ? (
-                'Sending Message...'
-              ) : (
-                <>
-                  <Send className="w-4 h-4" /> Send Message
-                </>
-              )}
+              Get In Touch
             </button>
-
-            {formStatus === 'success' && (
-              <p className="text-xs sm:text-sm font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 pt-2">
-                <CheckCircle2 className="w-4 h-4 shrink-0" /> Message delivered successfully! I will reply shortly.
-              </p>
-            )}
-            {formStatus === 'error' && (
-              <p className="text-xs sm:text-sm font-medium text-red-500 pt-2">
-                {errorMessage || 'Something went wrong. Please try again.'}
-              </p>
-            )}
-          </form>
-
-          {/* Footer note */}
-          <div className="pt-8 border-t border-zinc-200/50 dark:border-zinc-800/50 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-400 dark:text-zinc-500">
-            <span>© {new Date().getFullYear()} Mohammad Atifuddin. All rights reserved.</span>
-            <span className="font-mono text-xs">atifuddin.dev</span>
           </div>
-        </section>
+          <div className="flex items-center gap-4">
+            <a 
+              href="https://github.com/Atif-uddin" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-zinc-900 dark:hover:text-white transition-colors inline-flex items-center gap-1 font-medium"
+            >
+              <GithubIcon className="w-3.5 h-3.5" /> GitHub
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/mohammad-atifuddin-139774217" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-zinc-900 dark:hover:text-white transition-colors inline-flex items-center gap-1 font-medium"
+            >
+              <LinkedinIcon className="w-3.5 h-3.5" /> LinkedIn
+            </a>
+            <span className="font-mono text-xs text-zinc-400 dark:text-zinc-600">atifuddin.dev</span>
+          </div>
+        </footer>
 
       </main>
 
