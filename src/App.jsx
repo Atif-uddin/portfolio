@@ -25,8 +25,8 @@ import {
   Quote
 } from 'lucide-react'
 
-// Custom SVGs for GitHub and LinkedIn
-function GithubIcon({ className = "w-4 h-4" }) {
+// Custom SVGs for GitHub and LinkedIn with larger default sizing
+function GithubIcon({ className = "w-5 h-5" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
@@ -34,7 +34,7 @@ function GithubIcon({ className = "w-4 h-4" }) {
   )
 }
 
-function LinkedinIcon({ className = "w-4 h-4" }) {
+function LinkedinIcon({ className = "w-5 h-5" }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.78a1.68 1.68 0 1 0 0 3.36 1.68 1.68 0 0 0 0-3.36z" />
@@ -107,42 +107,42 @@ function GitHubCalendarWidget({ darkMode }) {
   }
 
   return (
-    <div className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/80 dark:bg-zinc-950/70 shadow-sm space-y-5">
+    <div className="p-6 sm:p-8 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/80 dark:bg-zinc-950/70 shadow-sm space-y-6">
       {/* Header with live total count */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-zinc-100 dark:border-zinc-900 text-sm">
-        <div className="flex items-center gap-2">
-          <GithubIcon className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-zinc-100 dark:border-zinc-900 text-sm sm:text-base">
+        <div className="flex items-center gap-2.5">
+          <GithubIcon className="w-5 h-5 text-zinc-900 dark:text-zinc-100" />
           <a 
             href="https://github.com/Atif-uddin" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="font-bold text-zinc-950 dark:text-zinc-50 hover:underline inline-flex items-center gap-1"
+            className="font-bold text-zinc-950 dark:text-zinc-50 hover:underline inline-flex items-center gap-1.5"
           >
-            @Atif-uddin on GitHub <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
+            @Atif-uddin on GitHub <ArrowUpRight className="w-4 h-4 opacity-60" />
           </a>
         </div>
-        <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+        <span className="text-xs sm:text-sm font-mono text-zinc-500 dark:text-zinc-400">
           {totalContributions} contributions in the last year
         </span>
       </div>
 
       {/* Stretched Interactive Grid with Hover Tooltip at Cell */}
       <div className="overflow-x-auto py-2">
-        <div className="flex gap-1 sm:gap-1.5 w-full justify-between min-w-[580px]">
+        <div className="flex gap-1.5 sm:gap-2 w-full justify-between min-w-[580px]">
           {weeks.map((week, wIdx) => (
-            <div key={wIdx} className="flex flex-col gap-1 sm:gap-1.5 flex-1 items-center">
+            <div key={wIdx} className="flex flex-col gap-1.5 sm:gap-2 flex-1 items-center">
               {week.map((day, dIdx) => (
                 <div key={dIdx} className="relative group w-full flex justify-center">
                   <div
                     style={{
                       backgroundColor: getCellColor(day.level || 0, darkMode)
                     }}
-                    className="w-full aspect-square min-w-[11px] min-h-[11px] max-w-[18px] max-h-[18px] rounded-[3px] transition-transform hover:scale-125 cursor-pointer"
+                    className="w-full aspect-square min-w-[12px] min-h-[12px] max-w-[20px] max-h-[20px] rounded-[3px] transition-transform hover:scale-125 cursor-pointer"
                   />
                   
                   {/* Tooltip positioned directly above hovered cell */}
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center z-50 pointer-events-none whitespace-nowrap">
-                    <div className="px-2.5 py-1 rounded-md bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100 text-[11px] font-sans font-medium shadow-xl border border-zinc-700/80">
+                    <div className="px-3 py-1.5 rounded-md bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100 text-xs font-sans font-medium shadow-xl border border-zinc-700/80">
                       {day.count > 0 
                         ? `${day.count} ${day.count === 1 ? 'contribution' : 'contributions'} on ${formatDate(day.date)}`
                         : `No contributions on ${formatDate(day.date)}`
@@ -158,15 +158,15 @@ function GitHubCalendarWidget({ darkMode }) {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 dark:text-zinc-500 pt-1">
+      <div className="flex items-center justify-between text-xs font-mono text-zinc-400 dark:text-zinc-500 pt-1">
         <span>Continuous commit history</span>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <span>Less</span>
           {[0, 1, 2, 3, 4].map(lvl => (
             <span
               key={lvl}
               style={{ backgroundColor: getCellColor(lvl, darkMode) }}
-              className="w-[10px] h-[10px] rounded-[2px] inline-block"
+              className="w-[12px] h-[12px] rounded-[3px] inline-block"
             />
           ))}
           <span>More</span>
@@ -243,27 +243,27 @@ export default function App() {
 
   // Dual Row Floating Tech Stack Items
   const techRow1 = [
-    { name: 'React.js', icon: <Code2 className="w-4 h-4 text-cyan-400" /> },
-    { name: 'Next.js', icon: <Server className="w-4 h-4 text-slate-800 dark:text-slate-100" /> },
-    { name: 'TypeScript', icon: <Code2 className="w-4 h-4 text-blue-500" /> },
-    { name: 'JavaScript (ES6+)', icon: <Code2 className="w-4 h-4 text-yellow-500" /> },
-    { name: 'Tailwind CSS', icon: <Layers className="w-4 h-4 text-sky-400" /> },
-    { name: 'HTML5 & CSS3', icon: <Layers className="w-4 h-4 text-orange-500" /> },
-    { name: 'Vite', icon: <Code2 className="w-4 h-4 text-purple-400" /> },
-    { name: 'Context API', icon: <Code2 className="w-4 h-4 text-emerald-400" /> }
+    { name: 'React.js', icon: <Code2 className="w-5 h-5 text-cyan-400" /> },
+    { name: 'Next.js', icon: <Server className="w-5 h-5 text-slate-800 dark:text-slate-100" /> },
+    { name: 'TypeScript', icon: <Code2 className="w-5 h-5 text-blue-500" /> },
+    { name: 'JavaScript (ES6+)', icon: <Code2 className="w-5 h-5 text-yellow-500" /> },
+    { name: 'Tailwind CSS', icon: <Layers className="w-5 h-5 text-sky-400" /> },
+    { name: 'HTML5 & CSS3', icon: <Layers className="w-5 h-5 text-orange-500" /> },
+    { name: 'Vite', icon: <Code2 className="w-5 h-5 text-purple-400" /> },
+    { name: 'Context API', icon: <Code2 className="w-5 h-5 text-emerald-400" /> }
   ]
 
   const techRow2 = [
-    { name: 'Node.js', icon: <Server className="w-4 h-4 text-green-500" /> },
-    { name: 'Express.js', icon: <Server className="w-4 h-4 text-slate-400" /> },
-    { name: 'REST APIs', icon: <Server className="w-4 h-4 text-orange-400" /> },
-    { name: 'MongoDB & Atlas', icon: <Database className="w-4 h-4 text-emerald-500" /> },
-    { name: 'PostgreSQL (Supabase)', icon: <Database className="w-4 h-4 text-blue-400" /> },
-    { name: 'JWT & OAuth 2.0', icon: <Code2 className="w-4 h-4 text-purple-400" /> },
-    { name: 'Resend API', icon: <Send className="w-4 h-4 text-emerald-400" /> },
-    { name: 'Git & GitHub', icon: <GithubIcon className="w-4 h-4 text-slate-400" /> },
-    { name: 'Postman', icon: <Send className="w-4 h-4 text-orange-500" /> },
-    { name: 'Cloudinary & Vercel', icon: <Server className="w-4 h-4 text-indigo-400" /> }
+    { name: 'Node.js', icon: <Server className="w-5 h-5 text-green-500" /> },
+    { name: 'Express.js', icon: <Server className="w-5 h-5 text-slate-400" /> },
+    { name: 'REST APIs', icon: <Server className="w-5 h-5 text-orange-400" /> },
+    { name: 'MongoDB & Atlas', icon: <Database className="w-5 h-5 text-emerald-500" /> },
+    { name: 'PostgreSQL (Supabase)', icon: <Database className="w-5 h-5 text-blue-400" /> },
+    { name: 'JWT & OAuth 2.0', icon: <Code2 className="w-5 h-5 text-purple-400" /> },
+    { name: 'Resend API', icon: <Send className="w-5 h-5 text-emerald-400" /> },
+    { name: 'Git & GitHub', icon: <GithubIcon className="w-5 h-5 text-slate-400" /> },
+    { name: 'Postman', icon: <Send className="w-5 h-5 text-orange-500" /> },
+    { name: 'Cloudinary & Vercel', icon: <Server className="w-5 h-5 text-indigo-400" /> }
   ]
 
   useEffect(() => {
@@ -367,9 +367,9 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#000000] text-zinc-900 dark:text-zinc-100 bg-grid-pattern transition-colors duration-200 antialiased">
       
-      {/* Floating Bottom Social & Action Dock with Auto-Hide on Idle */}
+      {/* Floating Bottom Social & Action Dock with Enlaraged Icons and 3.5s Idle Auto-Hide */}
       <nav 
-        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 sm:gap-2.5 px-4 py-2.5 rounded-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800 shadow-2xl text-zinc-600 dark:text-zinc-400 transition-all duration-300 ease-in-out ${
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 sm:gap-4 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800 shadow-2xl text-zinc-700 dark:text-zinc-300 transition-all duration-300 ease-in-out ${
           isDockVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-8 pointer-events-none'
         }`}
       >
@@ -378,9 +378,9 @@ export default function App() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           title="Home / Back to top"
           aria-label="Home"
-          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          className="p-2 sm:p-2.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all transform hover:scale-110"
         >
-          <Home className="w-4 h-4" />
+          <Home className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
 
         {/* 2. Download Resume Icon */}
@@ -389,9 +389,9 @@ export default function App() {
           download="Atifuddin_Resume.pdf"
           title="Download Resume (PDF)"
           aria-label="Download Resume"
-          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          className="p-2 sm:p-2.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all transform hover:scale-110"
         >
-          <FileDown className="w-4 h-4" />
+          <FileDown className="w-5 h-5 sm:w-6 sm:h-6" />
         </a>
 
         {/* 3. GitHub Icon */}
@@ -401,9 +401,9 @@ export default function App() {
           rel="noopener noreferrer"
           title="GitHub Profile"
           aria-label="GitHub"
-          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          className="p-2 sm:p-2.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all transform hover:scale-110"
         >
-          <GithubIcon className="w-4 h-4" />
+          <GithubIcon className="w-5 h-5 sm:w-6 sm:h-6" />
         </a>
 
         {/* 4. LinkedIn Icon */}
@@ -413,9 +413,9 @@ export default function App() {
           rel="noopener noreferrer"
           title="LinkedIn Profile"
           aria-label="LinkedIn"
-          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          className="p-2 sm:p-2.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all transform hover:scale-110"
         >
-          <LinkedinIcon className="w-4 h-4" />
+          <LinkedinIcon className="w-5 h-5 sm:w-6 sm:h-6" />
         </a>
 
         {/* 5. Contact Mail Icon */}
@@ -423,21 +423,21 @@ export default function App() {
           onClick={() => setIsModalOpen(true)}
           title="Get In Touch"
           aria-label="Get In Touch"
-          className="p-2 rounded-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-colors"
+          className="p-2 sm:p-2.5 rounded-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-all transform hover:scale-110"
         >
-          <Mail className="w-4 h-4" />
+          <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
 
-        <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 mx-0.5" />
+        <div className="w-[1.5px] h-5 bg-zinc-200 dark:bg-zinc-800 mx-1" />
 
         {/* 6. Theme Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
           title="Toggle Theme"
           aria-label="Toggle dark mode"
-          className="p-2 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          className="p-2 sm:p-2.5 rounded-full hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all transform hover:scale-110"
         >
-          {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-zinc-600" />}
+          {darkMode ? <Sun className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" /> : <Moon className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-600" />}
         </button>
       </nav>
 
@@ -445,26 +445,26 @@ export default function App() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div 
-            className="relative w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-2xl p-6 sm:p-8 space-y-6 animate-in zoom-in-95 duration-150"
+            className="relative w-full max-w-xl rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-2xl p-6 sm:p-8 space-y-6 animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-start justify-between gap-4 pb-4 border-b border-zinc-100 dark:border-zinc-900">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2.5">
+                  <Mail className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                   Get In Touch
                 </h2>
-                <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+                <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 mt-1">
                   Send a message directly to my inbox at <strong className="text-zinc-700 dark:text-zinc-300">uddinatif34@gmail.com</strong>
                 </p>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
                 aria-label="Close modal"
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                className="p-2 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
@@ -472,88 +472,88 @@ export default function App() {
             <form onSubmit={handleContactSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Name</label>
+                  <label className="block text-xs sm:text-sm font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Name</label>
                   <input
                     type="text"
                     name="name"
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm text-zinc-900 dark:text-white transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm sm:text-base text-zinc-900 dark:text-white transition-colors"
                     placeholder="John Doe"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Email</label>
+                  <label className="block text-xs sm:text-sm font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Your Email</label>
                   <input
                     type="email"
                     name="email"
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm text-zinc-900 dark:text-white transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm sm:text-base text-zinc-900 dark:text-white transition-colors"
                     placeholder="john@example.com"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Subject</label>
+                <label className="block text-xs sm:text-sm font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Subject</label>
                 <input
                   type="text"
                   name="subject"
                   required
                   value={formData.subject}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm text-zinc-900 dark:text-white transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm sm:text-base text-zinc-900 dark:text-white transition-colors"
                   placeholder="Opportunity / Collaboration / Inquiry"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Message</label>
+                <label className="block text-xs sm:text-sm font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wider">Message</label>
                 <textarea
                   rows="4"
                   name="message"
                   required
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm text-zinc-900 dark:text-white transition-colors resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 dark:focus:border-indigo-500 outline-none text-sm sm:text-base text-zinc-900 dark:text-white transition-colors resize-none"
                   placeholder="Hi Atifuddin, I'd like to discuss..."
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-2">
+              <div className="flex items-center justify-end gap-3 pt-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 font-medium text-sm transition-colors"
+                  className="px-5 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 font-semibold text-sm sm:text-base transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={formStatus === 'submitting'}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm disabled:opacity-50 transition-all shadow-sm"
+                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm sm:text-base disabled:opacity-50 transition-all shadow-md hover:shadow-lg"
                 >
                   {formStatus === 'submitting' ? (
                     'Sending...'
                   ) : (
                     <>
-                      <Send className="w-4 h-4" /> Send Message
+                      <Send className="w-4 h-4 sm:w-5 sm:h-5" /> Send Message
                     </>
                   )}
                 </button>
               </div>
 
               {formStatus === 'success' && (
-                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm font-medium flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-sm font-medium flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 shrink-0" />
                   Message sent successfully! I will get back to you shortly.
                 </div>
               )}
               {formStatus === 'error' && (
-                <p className="text-xs sm:text-sm font-medium text-red-500 pt-1">
+                <p className="text-sm font-medium text-red-500 pt-1">
                   {errorMessage || 'Something went wrong. Please try again.'}
                 </p>
               )}
@@ -563,84 +563,84 @@ export default function App() {
       )}
 
       {/* Main Container */}
-      <main className="max-w-3xl sm:max-w-4xl mx-auto px-5 sm:px-8 pt-16 sm:pt-24 pb-36 space-y-20">
+      <main className="max-w-3xl sm:max-w-4xl mx-auto px-5 sm:px-8 pt-20 sm:pt-28 pb-40 space-y-24">
         
         {/* Intro / Hero Header */}
-        <section id="about" className="space-y-6">
+        <section id="about" className="space-y-7">
           
           <div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 mb-2">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-950 dark:text-zinc-50 mb-3 leading-tight">
               Mohammad Atifuddin
             </h1>
-            <p className="text-sm sm:text-base font-medium text-zinc-500 dark:text-zinc-400">
+            <p className="text-xl sm:text-2xl font-semibold text-zinc-600 dark:text-zinc-400">
               Full Stack Software Developer
             </p>
           </div>
 
           {/* Short summary paragraph about what he does */}
-          <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-3xl">
+          <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-3xl">
             Full Stack Developer (MERN Stack & Next.js) with 6+ months of internship experience building and shipping production-ready web applications. Proven ability to deliver features end-to-end from REST API design and JWT authentication to responsive React UIs and cloud deployments.
           </p>
 
           {/* Personal information in points with subtle matching icons in same text color */}
-          <div className="space-y-2.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-medium">
-            <div className="flex items-center gap-2.5">
-              <Code2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
+          <div className="space-y-3 text-sm sm:text-base text-zinc-700 dark:text-zinc-300 font-medium">
+            <div className="flex items-center gap-3">
+              <Code2 className="w-5 h-5 text-zinc-500 dark:text-zinc-400 shrink-0" />
               <span>Full Stack Developer</span>
             </div>
             
-            <div className="flex items-center gap-2.5">
-              <Mail className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
+            <div className="flex items-center gap-3">
+              <Mail className="w-5 h-5 text-zinc-500 dark:text-zinc-400 shrink-0" />
               <a 
                 href="mailto:uddinatif34@gmail.com" 
-                className="hover:underline text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors"
+                className="hover:underline text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors font-semibold"
               >
                 uddinatif34@gmail.com
               </a>
             </div>
 
-            <div className="flex items-center gap-2.5">
-              <MapPin className="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
+            <div className="flex items-center gap-3">
+              <MapPin className="w-5 h-5 text-zinc-500 dark:text-zinc-400 shrink-0" />
               <span>Hyderabad, IN</span>
             </div>
 
-            <div className="flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 ml-1 mr-1" />
-              <span className="text-emerald-700 dark:text-emerald-400 font-semibold">Available to connect</span>
+            <div className="flex items-center gap-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 ml-1 mr-1" />
+              <span className="text-emerald-700 dark:text-emerald-400 font-bold">Available to connect</span>
             </div>
           </div>
 
           {/* Clean Get in Touch CTA button */}
-          <div className="pt-2">
+          <div className="pt-3">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold text-xs sm:text-sm hover:opacity-90 transition-opacity shadow-sm"
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold text-sm sm:text-base hover:opacity-90 transition-opacity shadow-md hover:shadow-lg"
             >
-              <Mail className="w-4 h-4" /> Get in Touch
+              <Mail className="w-4 h-4 sm:w-5 sm:h-5" /> Get in Touch
             </button>
           </div>
 
         </section>
 
         {/* Floating Technical Stack Section (Dual-Row Horizontal Marquee) */}
-        <section id="skills" className="space-y-6 pt-4 border-t border-zinc-200/80 dark:border-zinc-800/90 overflow-hidden">
+        <section id="skills" className="space-y-7 pt-6 border-t border-zinc-200/80 dark:border-zinc-800/90 overflow-hidden">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2.5">
-              <Code2 className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-3">
+              <Code2 className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
               Technical Stack & Skills
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 mt-1.5">
               Core technologies, frameworks, and developer tools I work with daily (hover to pause).
             </p>
           </div>
 
           {/* Row 1: Left to Right Marquee */}
-          <div className="flex overflow-hidden py-1.5 select-none -mx-4 sm:-mx-8">
-            <div className="animate-marquee flex gap-3 px-2">
+          <div className="flex overflow-hidden py-2 select-none -mx-4 sm:-mx-8">
+            <div className="animate-marquee flex gap-3.5 px-2">
               {[...techRow1, ...techRow1, ...techRow1].map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800/90 shadow-sm hover:border-indigo-500/60 font-mono text-xs sm:text-sm font-medium text-zinc-800 dark:text-zinc-200 shrink-0 transition-colors"
+                  className="flex items-center gap-3 px-4.5 py-3 rounded-xl bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800/90 shadow-sm hover:border-indigo-500/60 font-mono text-xs sm:text-sm font-semibold text-zinc-800 dark:text-zinc-200 shrink-0 transition-colors"
                 >
                   {item.icon}
                   <span>{item.name}</span>
@@ -650,12 +650,12 @@ export default function App() {
           </div>
 
           {/* Row 2: Right to Left Marquee */}
-          <div className="flex overflow-hidden py-1.5 select-none -mx-4 sm:-mx-8">
-            <div className="animate-marquee-reverse flex gap-3 px-2">
+          <div className="flex overflow-hidden py-2 select-none -mx-4 sm:-mx-8">
+            <div className="animate-marquee-reverse flex gap-3.5 px-2">
               {[...techRow2, ...techRow2, ...techRow2].map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800/90 shadow-sm hover:border-indigo-500/60 font-mono text-xs sm:text-sm font-medium text-zinc-800 dark:text-zinc-200 shrink-0 transition-colors"
+                  className="flex items-center gap-3 px-4.5 py-3 rounded-xl bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800/90 shadow-sm hover:border-indigo-500/60 font-mono text-xs sm:text-sm font-semibold text-zinc-800 dark:text-zinc-200 shrink-0 transition-colors"
                 >
                   {item.icon}
                   <span>{item.name}</span>
@@ -666,13 +666,13 @@ export default function App() {
         </section>
 
         {/* Work Experience Section */}
-        <section id="experience" className="space-y-6 pt-4 border-t border-zinc-200/80 dark:border-zinc-800/90">
+        <section id="experience" className="space-y-7 pt-6 border-t border-zinc-200/80 dark:border-zinc-800/90">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2.5">
-              <Briefcase className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-3">
+              <Briefcase className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
               Work & Internship Experience
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 mt-1.5">
               Engineering contributions at tech startups and organizations.
             </p>
           </div>
@@ -681,26 +681,26 @@ export default function App() {
             {internships.map((job, idx) => (
               <div 
                 key={idx} 
-                className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all space-y-4"
+                className="p-6 sm:p-8 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all space-y-4"
               >
-                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 pb-3 border-b border-zinc-100 dark:border-zinc-900">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-4 border-b border-zinc-100 dark:border-zinc-900">
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold text-zinc-950 dark:text-zinc-50">
+                    <h3 className="text-lg sm:text-xl font-bold text-zinc-950 dark:text-zinc-50">
                       {job.role}
                     </h3>
-                    <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-                      {job.company} • <span className="text-xs font-normal text-zinc-500">{job.location}</span>
+                    <p className="text-base font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5">
+                      {job.company} • <span className="text-sm font-normal text-zinc-500">{job.location}</span>
                     </p>
                   </div>
-                  <span className="text-xs font-mono font-medium text-zinc-500 dark:text-zinc-400 shrink-0">
+                  <span className="text-xs sm:text-sm font-mono font-medium text-zinc-500 dark:text-zinc-400 shrink-0">
                     {job.duration}
                   </span>
                 </div>
 
-                <ul className="space-y-2.5 text-sm sm:text-base text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                <ul className="space-y-3 text-sm sm:text-base text-zinc-600 dark:text-zinc-300 leading-relaxed">
                   {job.highlights.map((point, pIdx) => (
-                    <li key={pIdx} className="flex items-start gap-2.5">
-                      <span className="text-indigo-500 font-bold mt-1 text-xs">✓</span>
+                    <li key={pIdx} className="flex items-start gap-3">
+                      <span className="text-indigo-500 font-bold mt-1 text-sm">✓</span>
                       <span>{point}</span>
                     </li>
                   ))}
@@ -711,14 +711,14 @@ export default function App() {
         </section>
 
         {/* Featured Projects Section */}
-        <section id="projects" className="space-y-6 pt-4 border-t border-zinc-200/80 dark:border-zinc-800/90">
+        <section id="projects" className="space-y-7 pt-6 border-t border-zinc-200/80 dark:border-zinc-800/90">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2.5">
-                <Layers className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-3">
+                <Layers className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
                 Featured Projects
               </h2>
-              <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 mt-1.5">
                 Full-stack web platforms engineered with modern architectures.
               </p>
             </div>
@@ -726,32 +726,32 @@ export default function App() {
               href="https://github.com/Atif-uddin?tab=repositories" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline inline-flex items-center gap-1 self-start sm:self-auto"
+              className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline inline-flex items-center gap-1 self-start sm:self-auto"
             >
-              All repositories on GitHub <ArrowUpRight className="w-3.5 h-3.5" />
+              All repositories on GitHub <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-7">
             {projects.map((project, idx) => (
               <div 
                 key={idx}
-                className="p-6 sm:p-7 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all space-y-4 group"
+                className="p-6 sm:p-8 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-all space-y-4 group"
               >
                 <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-lg sm:text-xl font-bold text-zinc-950 dark:text-zinc-50 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-zinc-50 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                     {project.title}
                   </h3>
                   
-                  <div className="flex items-center gap-3 shrink-0 text-xs font-semibold">
+                  <div className="flex items-center gap-3 shrink-0 text-xs sm:text-sm font-semibold">
                     {project.github && (
                       <a 
                         href={project.github} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white inline-flex items-center gap-1 transition-colors px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900"
+                        className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white inline-flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900"
                       >
-                        <GithubIcon className="w-3.5 h-3.5" /> Code <ArrowUpRight className="w-3 h-3 opacity-60" />
+                        <GithubIcon className="w-4 h-4" /> Code <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
                       </a>
                     )}
                     {project.live ? (
@@ -759,27 +759,27 @@ export default function App() {
                         href={project.live} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1 transition-colors px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50 dark:bg-emerald-950/40"
+                        className="text-emerald-700 dark:text-emerald-400 hover:underline inline-flex items-center gap-1.5 transition-colors px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50 dark:bg-emerald-950/40 font-bold"
                       >
-                        <Globe className="w-3.5 h-3.5" /> Live Demo <ArrowUpRight className="w-3 h-3" />
+                        <Globe className="w-4 h-4" /> Live Demo <ArrowUpRight className="w-3.5 h-3.5" />
                       </a>
                     ) : (
-                      <span className="text-zinc-400 dark:text-zinc-600 text-xs px-2.5 py-1 select-none">
+                      <span className="text-zinc-400 dark:text-zinc-600 text-xs sm:text-sm px-3 py-1.5 select-none">
                         Live Demo (Soon)
                       </span>
                     )}
                   </div>
                 </div>
 
-                <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed">
                   {project.description}
                 </p>
 
-                <div className="flex flex-wrap gap-1.5 pt-1">
+                <div className="flex flex-wrap gap-2 pt-1">
                   {project.tech.map((t, tIdx) => (
                     <span 
                       key={tIdx} 
-                      className="px-2.5 py-1 rounded-md text-xs font-mono bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200/70 dark:border-zinc-800"
+                      className="px-3 py-1 rounded-md text-xs sm:text-sm font-mono bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200/70 dark:border-zinc-800 font-medium"
                     >
                       {t}
                     </span>
@@ -791,13 +791,13 @@ export default function App() {
         </section>
 
         {/* GitHub Contributions Section with Exact Green Color Scheme & Hover Tooltip */}
-        <section id="github" className="space-y-6 pt-4 border-t border-zinc-200/80 dark:border-zinc-800/90">
+        <section id="github" className="space-y-7 pt-6 border-t border-zinc-200/80 dark:border-zinc-800/90">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2.5">
-              <GitCommit className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-3">
+              <GitCommit className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
               GitHub Contributions
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 mt-1.5">
               Public commit history, repositories, and continuous code activity. Hover any cell to view details.
             </p>
           </div>
@@ -806,37 +806,37 @@ export default function App() {
         </section>
 
         {/* Education & Certifications */}
-        <section className="space-y-6 pt-4 border-t border-zinc-200/80 dark:border-zinc-800/90">
+        <section className="space-y-7 pt-6 border-t border-zinc-200/80 dark:border-zinc-800/90">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-2.5">
-              <GraduationCap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 flex items-center gap-3">
+              <GraduationCap className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
               Education & Certifications
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="p-6 rounded-xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm space-y-2">
+              <div className="flex items-center justify-between text-xs sm:text-sm font-mono text-zinc-400">
                 <span>Degree</span>
                 <span>2022 – 2026</span>
               </div>
-              <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
+              <h3 className="text-lg sm:text-xl font-bold text-zinc-950 dark:text-zinc-50">
                 B.Tech in Computer Science & Design (CSD)
               </h3>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400">
                 Sree Chaitanya College of Engineering • CGPA: 7.2 / 10
               </p>
             </div>
 
-            <div className="p-5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
+            <div className="p-6 rounded-xl border border-zinc-200/80 dark:border-zinc-800/90 bg-white/70 dark:bg-zinc-950/60 shadow-sm space-y-2">
+              <div className="flex items-center justify-between text-xs sm:text-sm font-mono text-zinc-400">
                 <span>Certification</span>
                 <span>Jan 2026 – May 2026</span>
               </div>
-              <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
+              <h3 className="text-lg sm:text-xl font-bold text-zinc-950 dark:text-zinc-50">
                 Full Stack Web Development (MERN)
               </h3>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400">
                 Code for India • Certificate of Completion
               </p>
             </div>
@@ -844,12 +844,12 @@ export default function App() {
         </section>
 
         {/* Productive Quotation & Final CTA Section */}
-        <section className="pt-10 pb-6 border-t border-zinc-200/80 dark:border-zinc-800/90 text-center space-y-6">
-          <div className="max-w-xl mx-auto space-y-2">
-            <p className="text-base sm:text-lg font-medium italic text-zinc-700 dark:text-zinc-300">
+        <section className="pt-12 pb-8 border-t border-zinc-200/80 dark:border-zinc-800/90 text-center space-y-7">
+          <div className="max-w-xl mx-auto space-y-2.5">
+            <p className="text-lg sm:text-2xl font-semibold italic text-zinc-800 dark:text-zinc-200 leading-snug">
               "First, solve the problem. Then, write the code."
             </p>
-            <p className="text-xs font-mono text-zinc-400 dark:text-zinc-500">
+            <p className="text-xs sm:text-sm font-mono text-zinc-400 dark:text-zinc-500">
               — John Johnson
             </p>
           </div>
@@ -857,43 +857,43 @@ export default function App() {
           <div>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold text-sm hover:opacity-90 transition-opacity shadow-md hover:shadow-lg"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold text-base sm:text-lg hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl"
             >
-              <Mail className="w-4 h-4" /> Get in Touch
+              <Mail className="w-5 h-5" /> Get in Touch
             </button>
           </div>
         </section>
 
         {/* Clean Footer */}
-        <footer className="pt-8 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 dark:text-zinc-500">
+        <footer className="pt-10 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-zinc-400 dark:text-zinc-500">
           <div className="flex items-center gap-4">
             <span>© {new Date().getFullYear()} Mohammad Atifuddin</span>
             <span>•</span>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
+              className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-semibold transition-colors"
             >
               Get In Touch
             </button>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <a 
               href="https://github.com/Atif-uddin" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="hover:text-zinc-900 dark:hover:text-white transition-colors inline-flex items-center gap-1 font-medium"
+              className="hover:text-zinc-900 dark:hover:text-white transition-colors inline-flex items-center gap-1.5 font-medium"
             >
-              <GithubIcon className="w-3.5 h-3.5" /> GitHub
+              <GithubIcon className="w-4 h-4" /> GitHub
             </a>
             <a 
               href="https://www.linkedin.com/in/mohammad-atifuddin-139774217" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="hover:text-zinc-900 dark:hover:text-white transition-colors inline-flex items-center gap-1 font-medium"
+              className="hover:text-zinc-900 dark:hover:text-white transition-colors inline-flex items-center gap-1.5 font-medium"
             >
-              <LinkedinIcon className="w-3.5 h-3.5" /> LinkedIn
+              <LinkedinIcon className="w-4 h-4" /> LinkedIn
             </a>
-            <span className="font-mono text-xs text-zinc-400 dark:text-zinc-600">atifuddin.dev</span>
+            <span className="font-mono text-xs sm:text-sm text-zinc-400 dark:text-zinc-600">atifuddin.dev</span>
           </div>
         </footer>
 
